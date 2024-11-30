@@ -48,5 +48,18 @@ Follow these instructions to set up and run the project on your local machine.
 4. Run the local server at localhost:3000 :
    ```bash
    npm run dev
-   
+
 # crowdRaise-educhain
+This Project is depolyed on lineaSepolia : 0xC39Fcb288e011983D213787CB04c4d69666d605a
+TestNetExplorerLink: https://sepolia.lineascan.build/address/0xC39Fcb288e011983D213787CB04c4d69666d605a
+
+This Project is depolyed on arbitrumSepolia : 0xB6822f103b7bF5d7C361cA728C42627511c517D4
+TestNetExplorerLink: https://sepolia.arbiscan.io/address/0xB6822f103b7bF5d7C361cA728C42627511c517D4
+
+This Project is depolyed on eduChain : 0xC39Fcb288e011983D213787CB04c4d69666d605a
+TestNetExplorerLink: https://edu-chain-testnet.blockscout.com/address/0xC39Fcb288e011983D213787CB04c4d69666d605a
+
+This Project is depolyed on mantle : 0xC39Fcb288e011983D213787CB04c4d69666d605a
+TestNetExplorerLink: https://sepolia.mantlescan.xyz/address/0xC39Fcb288e011983D213787CB04c4d69666d605a
+
+**I dont know why contract addresses are same I have deployed separately
