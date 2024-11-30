@@ -18,5 +18,13 @@ module.exports = {
       url: process.env.ARBITRUM_SEPOLIA_URL, // Arbitrum Sepolia RPC URL
       accounts: [`0x${process.env.PRIVATE_KEY}`],
     },
+    educhain: {
+        url: process.env.EDUCHAIN_URL, // Arbitrum Sepolia RPC URL
+        accounts: [`0x${process.env.PRIVATE_KEY}`],
+      },
+    mantle: {
+        url: process.env.MANTLE_URL, // Arbitrum Sepolia RPC URL
+        accounts: [`0x${process.env.PRIVATE_KEY}`],
+      },
   },
 };
