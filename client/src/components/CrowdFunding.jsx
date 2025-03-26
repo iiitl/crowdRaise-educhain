@@ -22,7 +22,7 @@ const CrowdFunding = () => {
         const donationAmount = donationAmounts[proposalId];
         if (donationAmount > 0) {
             try {
-                const donationInWei = ethers.parseEther(donationAmount.toString());
+                const donationInWei = donationAmount;
 
                 const tx = await contract.fundProposal(proposalId, {
                     value: donationInWei,
@@ -51,8 +51,8 @@ const CrowdFunding = () => {
                     const id = proposal[0].toString();
                     const metadataUri = proposal[1];
                     const votes = proposal[2].toString();
-                    const fundsRaised = ethers.formatEther(proposal[3]);
-                    const goal = ethers.formatEther(proposal[4]);
+                    const fundsRaised = ethers.utils.formatEther(proposal[3]);
+                    const goal = ethers.utils.formatEther(proposal[4]);
                     const proposer = proposal[5];
                     const approved = proposal[6];
                     const fundingCompleted = proposal[7];

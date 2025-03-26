@@ -32,7 +32,7 @@ function Proposals() {
           headers: {
             pinata_api_key: `35cb1bf7be19d2a8fa0d`,
             pinata_secret_api_key: `2c2e9e43bca7a619154cb48e8b060c5643ea6220d0b7c9deb565fa491b3b3a50`,
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
           },
         });
         const resData = await res.data;
@@ -94,8 +94,8 @@ function Proposals() {
           let docs = '';
 
           try {
-            const response = await axios.get(metadataUri);
-            const metadata = response.data;
+            const response = 
+            const metadata = 
             title = metadata.title || 'No Title';
             details = metadata.description || 'No Details';
             hours = metadata.timeRequired || '0';

@@ -12,22 +12,7 @@ function Home() {
 
     useEffect(() => {
         const fetchRole = async () => {
-            if (state.contract && account) {
-                setIsLoading(true);
-                try {
-                    // Assuming contract has a method 'members' and checking if the member is a Teacher or Student
-                    const member = await state.contract.members(account);
-                    if (member.isTeacher) {
-                        setRole('Teacher');
-                    } else if (member.isStudent) {
-                        setRole('Student');
-                    }
-                } catch (error) {
-                    console.error('Error fetching member details:', error);
-                } finally {
-                    setIsLoading(false);
-                }
-            }
+            if (state.contract && account) {}
         };
 
         fetchRole();
