@@ -62,4 +62,4 @@ TestNetExplorerLink: https://edu-chain-testnet.blockscout.com/address/0xC39Fcb28
 This Project is depolyed on mantle : 0xC39Fcb288e011983D213787CB04c4d69666d605a
 TestNetExplorerLink: https://sepolia.mantlescan.xyz/address/0xC39Fcb288e011983D213787CB04c4d69666d605a
 
-**I dont know why contract addresses are same I have deployed separately
+
