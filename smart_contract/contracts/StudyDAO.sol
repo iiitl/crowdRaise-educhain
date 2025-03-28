@@ -7,6 +7,8 @@ contract StudyDAO {
         bool isTeacher;
         bool isStudent;
         uint256 tokensEarned;
+        uint256 voteCount;
+        uint256 resourceCount;
     }
 
     struct Proposal {
@@ -30,6 +32,8 @@ contract StudyDAO {
     mapping(address => Resource[]) public studentResources;
 
     uint256 public courseCompletionReward = 10;
+    uint256 public votingTokenReward = 1;
+    uint256 public resourceTokenReward = 3;
 
     // Events
     event MemberRegistered(address indexed member, bool isTeacher);
@@ -46,7 +50,10 @@ contract StudyDAO {
             reputation: 1,
             isTeacher: isTeacher,
             isStudent: !isTeacher,
-            tokensEarned: 0
+            tokensEarned: 0,
+            voteCount: 0,
+            resourceCount: 0
+
         });
 
         emit MemberRegistered(msg.sender, isTeacher);
@@ -77,6 +84,14 @@ contract StudyDAO {
         require(!proposal.approved, "Proposal already approved.");
 
         proposal.votes += members[msg.sender].reputation;
+        members[msg.sender].tokensEarned += votingTokenReward;
+        member[msg.sender].voteCount += 1;
+
+
+        if (members[msg.sender].voteCount % 5 == 0) {
+            members[msg.sender].reputation += 1;
+        }
+
         emit Voted(_proposalId, msg.sender, members[msg.sender].reputation);
 
         if (proposal.votes > 3) proposal.approved = true;
@@ -105,11 +120,16 @@ contract StudyDAO {
     // Students save their resources (e.g., course documents)
     function saveResource(string memory _resourceURI) public {
         require(members[msg.sender].isStudent, "Only students can save resources.");
-
         studentResources[msg.sender].push(Resource({
             id: studentResources[msg.sender].length,
             resourceURI: _resourceURI
         }));
+
+        members[msg.sender].tokensEarned += resourceTokenReward;
+        members[msg.sender].resourceCount += 1;
+        if (member[msg.sender].resourceCount % 2 == 0) {
+            member[msg.sender].reputation += 1;
+        }
     }
 
     // Get all resources saved by the student
