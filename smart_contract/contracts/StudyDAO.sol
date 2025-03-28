@@ -30,6 +30,8 @@ contract StudyDAO {
     mapping(address => Resource[]) public studentResources;
 
     uint256 public courseCompletionReward = 10;
+    uint256 public cooldownPeriod = 1 days;
+    mapping(address => mapping(uint => uint256)) public lastVoted;
 
     // Events
     event MemberRegistered(address indexed member, bool isTeacher);
@@ -42,8 +44,10 @@ contract StudyDAO {
     function registerMember(bool isTeacher) public {
         require(members[msg.sender].reputation == 0, "Member is already registered.");
 
+        uint initialReputation = isTeacher ? 2 : 1;
+
         members[msg.sender] = Member({
-            reputation: 1,
+            reputation: initialReputation,
             isTeacher: isTeacher,
             isStudent: !isTeacher,
             tokensEarned: 0
@@ -76,8 +80,16 @@ contract StudyDAO {
         Proposal storage proposal = proposals[_proposalId];
         require(!proposal.approved, "Proposal already approved.");
 
+        require(
+            lastVoted[msg.sender][_proposalId] == 0 || 
+            block.timestamp >= lastVoted[msg.sender][_proposalId] + cooldownPeriod,
+            "Cooldown period not elapsed"
+        );
+
         proposal.votes += members[msg.sender].reputation;
         emit Voted(_proposalId, msg.sender, members[msg.sender].reputation);
+
+        lastVoted[msg.sender][_proposalId] = block.timestamp;
 
         if (proposal.votes > 3) proposal.approved = true;
     }
@@ -121,6 +133,7 @@ contract StudyDAO {
     function completeCourse() public {
         require(members[msg.sender].isStudent, "Only students can complete courses.");
         members[msg.sender].tokensEarned += courseCompletionReward;
+        members[msg.sender].reputation += 1;
     }
 
     // Get tokens earned by a student
