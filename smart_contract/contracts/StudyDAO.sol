@@ -7,6 +7,7 @@ contract StudyDAO {
         bool isTeacher;
         bool isStudent;
         uint256 tokensEarned;
+        bool hasVoted;
     }
 
     struct Proposal {
@@ -17,7 +18,9 @@ contract StudyDAO {
         uint256 goal;
         address proposer;
         bool approved;
-        bool fundingCompleted;  // New flag to track if the funding is completed
+        bool fundingCompleted; 
+     // New flag to track if the funding is completed
+        
     }
 
     struct Resource {
@@ -30,6 +33,9 @@ contract StudyDAO {
     mapping(address => Resource[]) public studentResources;
 
     uint256 public courseCompletionReward = 10;
+    uint256 public voteReward=1;
+    uint256 public resourceContriReward=1;
+
 
     // Events
     event MemberRegistered(address indexed member, bool isTeacher);
@@ -46,14 +52,15 @@ contract StudyDAO {
             reputation: 1,
             isTeacher: isTeacher,
             isStudent: !isTeacher,
-            tokensEarned: 0
+            tokensEarned: 0,
+            hasVoted:false
         });
 
         emit MemberRegistered(msg.sender, isTeacher);
     }
 
     // Propose content (only teachers can propose)
-    function proposeContent(string memory _description, uint256 _goal) public {
+  function proposeContent(string memory _description, uint256 _goal) public {
         require(members[msg.sender].isTeacher, "Only teachers can propose content.");
 
         proposals.push(Proposal({
@@ -65,6 +72,7 @@ contract StudyDAO {
             proposer: msg.sender,
             approved: false,
             fundingCompleted: false // Initially, funding is not complete
+            tokenrewards: 0,
         }));
 
         emit ProposalCreated(proposals.length - 1, msg.sender, _description, _goal);
@@ -78,6 +86,15 @@ contract StudyDAO {
 
         proposal.votes += members[msg.sender].reputation;
         emit Voted(_proposalId, msg.sender, members[msg.sender].reputation);
+
+        require(members[msg.sender].hasVoted==false,"VOTED")
+        
+        members[msg.sender] = true;
+        members[msg.sender].tokensEarned += voteReward;
+        
+        emit TokenRewards(msg.sender, votereward);
+
+        
 
         if (proposal.votes > 3) proposal.approved = true;
     }
@@ -104,12 +121,17 @@ contract StudyDAO {
 
     // Students save their resources (e.g., course documents)
     function saveResource(string memory _resourceURI) public {
-        require(members[msg.sender].isStudent, "Only students can save resources.");
+        require(members[msg.sender].isStudent || members[msg.sender].isTeacher , 
+        "Only students & Teacher can save resources.");
 
         studentResources[msg.sender].push(Resource({
             id: studentResources[msg.sender].length,
             resourceURI: _resourceURI
         }));
+
+        members[msg.sender].tokensEarned += resourceContriReward;
+        emit ResourceContriReward(msg.sender,_resourceURI)
+
     }
 
     // Get all resources saved by the student
@@ -132,4 +154,5 @@ contract StudyDAO {
     function getProposals() public view returns (Proposal[] memory) {
         return proposals;
     }
+
 }
